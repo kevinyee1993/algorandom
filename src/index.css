@@ -12,3 +12,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.main-header {
+  border: 1px solid black;
+}
+
+.question-display-body {
+  border: 1px solid red;
+  display: flex;
+  justify-content: space-between;
+}
+
+.topic-select-body {
+  border: 1px solid blue;
+}

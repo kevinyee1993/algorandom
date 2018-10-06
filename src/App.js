@@ -2,11 +2,17 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import Header from './components/header';
+import TopicSelect from './components/topic_select';
+import QuestionDisplay from './components/question_display';
+
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <p>Start of something new it feels so right to be here with u</p>
+        <Header />
+        <TopicSelect />
+        <QuestionDisplay />
       </div>
     );
   }
