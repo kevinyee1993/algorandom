@@ -56,7 +56,8 @@ class QuestionDisplay extends Component {
 
 function mapStateToProps(state) {
   return {
-    currentTopic: state.currentTopic
+    currentTopic: state.currentTopic.topic,
+    alternate: state.currentTopic.alternate
   }
 }
 
