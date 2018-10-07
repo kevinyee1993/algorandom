@@ -6,6 +6,7 @@ const axios = require('axios');
 class QuestionDisplay extends Component {
   constructor(props) {
     super(props);
+    this.currentQuestion = { "title": null };
     this.state = { questionList: [] };
   }
 
@@ -17,9 +18,19 @@ class QuestionDisplay extends Component {
 
   selectRandomQuestion(currentTopic) {
     let questionList = this.filterQuestions(currentTopic);
-    const randomNum = Math.floor(Math.random() * questionList.length);
+    let randomNum = Math.floor(Math.random() * questionList.length);
 
-    return questionList[randomNum];
+    let selectedQuestion = questionList[randomNum];
+
+    if(selectedQuestion) {
+      while(selectedQuestion.title === this.currentQuestion.title) {
+        randomNum = Math.floor(Math.random() * questionList.length);
+        selectedQuestion = questionList[randomNum];
+
+      }
+    }
+
+    return selectedQuestion;
   }
 
   filterQuestions(currentTopic) {
@@ -37,7 +48,9 @@ class QuestionDisplay extends Component {
   render() {
 
     let selectedQuestion = this.selectRandomQuestion(this.props.currentTopic);
-    console.log(selectedQuestion);
+    if(selectedQuestion) {
+      this.currentQuestion = selectedQuestion;
+    }
 
     if(selectedQuestion) {
       return(
