@@ -15,4 +15,9 @@ module.exports = function(app, db) {
       }
     });
   });
+
+  app.get('/algorithms', async (req, res) => {
+    let arr = await db.collection('algorithms').find().toArray();
+    res.send(arr);
+  });
 };
