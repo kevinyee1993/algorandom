@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 config/db.js
+app/populate_db
 
 # testing
 /coverage
