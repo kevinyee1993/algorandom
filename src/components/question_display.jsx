@@ -56,8 +56,16 @@ class QuestionDisplay extends Component {
       return(
         <div className='question-display-body'>
           <h2>{ selectedQuestion.title }</h2>
+
+          <div className="modal">
+            <div className="modal-content">
+              <h1>Well done!</h1>
+            </div>
+          </div>
+
           <p>{ selectedQuestion.question }</p>
-          <button className="solved-button">Solved it!</button>
+
+          <button className="solved-button" onClick={ toggleModal }>Solved it!</button>
         </div>
       );
     } else {
@@ -66,6 +74,19 @@ class QuestionDisplay extends Component {
       );
     }
   }
+}
+
+function toggleModal() {
+  let modal = document.querySelector(".modal");
+  modal.classList.toggle("show-modal");
+  setTimeout(function() { toggleModalHelper(); }, 1000);
+  // console.log(intervalID);
+  // await setTimeout(clearTimeout(intervalID), 1000);
+}
+
+function toggleModalHelper() {
+  let modal = document.querySelector(".modal");
+  modal.classList.toggle("show-modal");
 }
 
 function mapStateToProps(state) {
