@@ -20,4 +20,17 @@ module.exports = function(app, db) {
     let arr = await db.collection('algorithms').find().toArray();
     res.send(arr);
   });
+
+  app.put('/algorithms/:title', (req,res) => {
+  const details = { 'title': req.params.title };
+
+  const isSolved = { isSolved: req.body.isSolved };
+  db.collection('algorithms').update(details, {$set : isSolved}, (err, result) => {
+    if (err) {
+        res.send({'error':'An error has occurred'});
+    } else {
+        res.send(isSolved);
+    }
+  });
+});
 };

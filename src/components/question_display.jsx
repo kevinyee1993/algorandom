@@ -14,6 +14,8 @@ class QuestionDisplay extends Component {
     this.currentQuestion = { "title": null };
     this.state = { questionList: [] };
 
+    this.selectedQuestion = null;
+
     // this.questionSolvedPressed = false;
     // this.selectedEmoji = null;
 
@@ -23,12 +25,26 @@ class QuestionDisplay extends Component {
 
   componentDidMount() {
     axios.get('/algorithms')
-      .then(response => this.setState({ questionList: response.data }))
-      .catch(error => console.log("error!"))
+    .then(response => {
+        this.setState({ questionList: response.data })
+      }
+    )
+    .catch(error => console.log("error!"))
   }
+
 
   selectRandomQuestion(currentTopic) {
     let questionList = this.filterQuestions(currentTopic);
+
+
+    // TODO: handles the removal of questions
+    if(questionList.length === 1) {
+      this.selectedQuestion = questionList[0];
+      return questionList[0];
+    } else if(questionList.length === 0) {
+      return null;
+    }
+
     let randomNum = Math.floor(Math.random() * questionList.length);
 
     let selectedQuestion = questionList[randomNum];
@@ -41,6 +57,7 @@ class QuestionDisplay extends Component {
       }
     }
 
+    this.selectedQuestion = selectedQuestion;
     return selectedQuestion;
   }
 
@@ -56,9 +73,13 @@ class QuestionDisplay extends Component {
     return filteredQuestions;
   }
 
-  questionSolved() {
+  async questionSolved() {
     this.toggleModal();
     setTimeout(() => { this.props.topicSelected(this.props.currentTopic); }, MODAL_TIMER);
+
+    await axios.put(`/algorithms/${ this.selectedQuestion.title }`, { isSolved: true })
+      .then(success => console.log("nice"))
+      .catch(error => console.log(error))
 
   }
 
