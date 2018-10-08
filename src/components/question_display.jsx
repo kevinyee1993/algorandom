@@ -57,7 +57,7 @@ class QuestionDisplay extends Component {
         <div className='question-display-body'>
           <h2>{ selectedQuestion.title }</h2>
           <p>{ selectedQuestion.question }</p>
-          <button>Solved it!</button>
+          <button className="solved-button">Solved it!</button>
         </div>
       );
     } else {

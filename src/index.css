@@ -21,8 +21,21 @@ code {
   border: 1px solid red;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .topic-select-body {
   border: 1px solid blue;
+}
+
+.solved-button {
+  width: 70px;
+  height: 30px;
+  /* background-color: lightgreen; */
+  font-weight: bold;
+}
+
+.solved-button:hover {
+  background-color: green;
+  color: white;
 }
