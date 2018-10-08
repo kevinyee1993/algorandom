@@ -60,6 +60,7 @@ class QuestionDisplay extends Component {
           <div className="modal">
             <div className="modal-content">
               <h1>Well done!</h1>
+              <img src='https://ubisafe.org/images/transparent-flames-fire-emoji-2.png' width="70" height="70"></img>
             </div>
           </div>
 
