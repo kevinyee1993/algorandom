@@ -7,12 +7,13 @@ import { topicSelected } from '../actions/index';
 const axios = require('axios');
 
 const MODAL_TIMER = 1000;
+const NO_MORE_QUESTIONS = "No more questions in this set!"
 
 class QuestionDisplay extends Component {
   constructor(props) {
     super(props);
     this.currentQuestion = { "title": null };
-    this.state = { questionList: [] };
+    this.state = { questionList: [], resetCounter: 0 };
 
     this.selectedQuestion = null;
 
@@ -21,6 +22,7 @@ class QuestionDisplay extends Component {
 
     this.questionSolved = this.questionSolved.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
+    this.resetQuestions = this.resetQuestions.bind(this);
   }
 
   componentDidMount() {
@@ -35,6 +37,7 @@ class QuestionDisplay extends Component {
 
 
   selectRandomQuestion(currentTopic) {
+    // TODO: questionList length is 0, might be something wrong with filterQuestions
     let questionList = this.filterQuestions(currentTopic);
 
 
@@ -43,7 +46,7 @@ class QuestionDisplay extends Component {
       this.selectedQuestion = questionList[0];
       return questionList[0];
     } else if(questionList.length === 0) {
-      return null;
+      return { title: NO_MORE_QUESTIONS, question: "Would you like to reset?" };
     }
 
     let randomNum = Math.floor(Math.random() * questionList.length);
@@ -62,14 +65,26 @@ class QuestionDisplay extends Component {
     return selectedQuestion;
   }
 
-  filterQuestions(currentTopic) {
+// TODO: PROBLEM MIGHT BE HERE?!?!?!?
+filterQuestions(currentTopic) {
     const filteredQuestions = [];
+    let titles = Object.keys(this.state.questionList);
 
-    Object.keys(this.state.questionList).forEach(title => {
+    for(let i = 0; i < titles.length; i++) {
+      let title = titles[i];
+
       if(this.state.questionList[title].category === currentTopic && !this.state.questionList[title].isSolved) {
         filteredQuestions.push(this.state.questionList[title]);
       }
-    });
+    }
+
+    // Object.keys(this.state.questionList).forEach(async title => {
+    //   if(this.state.questionList[title].category === currentTopic && !this.state.questionList[title].isSolved) {
+    //     await filteredQuestions.push(this.state.questionList[title]);
+    //   }
+    // });
+
+    // console.log(filteredQuestions);
 
     return filteredQuestions;
   }
@@ -119,20 +134,33 @@ class QuestionDisplay extends Component {
     }
   }
 
+  async resetQuestions() {
+    let questionTitles = Object.keys(this.state.questionList);
+
+    for(let i = 0; i < questionTitles.length; i++) {
+      await axios.put(`/algorithms/${ questionTitles[i] }`, { isSolved: false })
+        .then(success => console.log("nice"))
+        .catch(error => console.log(error))
+    }
+
+    this.setState({ resetCounter: this.state.resetCounter++ });
+
+    // this.selectedQuestion = this.selectRandomQuestion(this.props.currentTopic);
+  }
+
 
   render() {
-    let selectedQuestion = this.selectRandomQuestion(this.props.currentTopic);
-    if(selectedQuestion) {
-      // this.setState({ currentQuestion: selectedQuestion })
-      this.currentQuestion = selectedQuestion;
+    this.selectedQuestion = this.selectRandomQuestion(this.props.currentTopic);
+    if(this.selectedQuestion) {
+      this.currentQuestion = this.selectedQuestion;
     }
 
     // console.log(this.selectedEmoji);
 
-    if(selectedQuestion) {
+    if(this.selectedQuestion && this.selectedQuestion.title !== NO_MORE_QUESTIONS) {
       return(
         <div className='question-display-body'>
-          <h2>{ selectedQuestion.title }</h2>
+          <h2>{ this.selectedQuestion.title }</h2>
 
           <div className="modal">
             <div className="modal-content">
@@ -141,14 +169,18 @@ class QuestionDisplay extends Component {
             </div>
           </div>
 
-          <p>{ selectedQuestion.question }</p>
+          <p>{ this.selectedQuestion.question }</p>
 
           <button className="solved-button" onClick={ this.questionSolved }>Solved it!</button>
         </div>
       );
     } else {
       return(
-        <div></div>
+        <div className='question-display-body'>
+          <h2>{ this.selectedQuestion.title }</h2>
+          <p>{ this.selectedQuestion.question }</p>
+          <button className="reset-button" onClick={ this.resetQuestions }>Reset question list</button>
+        </div>
       );
     }
   }

@@ -78,6 +78,19 @@ code {
   color: white;
 }
 
+.reset-button {
+  width: 120px;
+  height: 30px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.reset-button:hover {
+  background-color: green;
+  color: white;
+}
+
 /* Congratulations modal */
 .modal {
        position: fixed;
