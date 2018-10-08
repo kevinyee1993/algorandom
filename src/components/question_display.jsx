@@ -1,13 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import { bindActionCreators } from 'redux';
+import { topicSelected } from '../actions/index';
+
 const axios = require('axios');
+
+const MODAL_TIMER = 1000;
 
 class QuestionDisplay extends Component {
   constructor(props) {
     super(props);
     this.currentQuestion = { "title": null };
     this.state = { questionList: [] };
+
+    this.questionSolved = this.questionSolved.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
   }
 
   componentDidMount() {
@@ -45,10 +53,27 @@ class QuestionDisplay extends Component {
     return filteredQuestions;
   }
 
+  questionSolved() {
+    this.toggleModal();
+    setTimeout(() => { this.props.topicSelected(this.props.currentTopic); }, MODAL_TIMER);
+
+  }
+
+  toggleModal() {
+    let modal = document.querySelector(".modal");
+    modal.classList.toggle("show-modal");
+    setTimeout(function() {
+      let modal = document.querySelector(".modal");
+      modal.classList.toggle("show-modal");
+    }, MODAL_TIMER);
+  }
+
+
   render() {
 
     let selectedQuestion = this.selectRandomQuestion(this.props.currentTopic);
     if(selectedQuestion) {
+      // this.setState({ currentQuestion: selectedQuestion })
       this.currentQuestion = selectedQuestion;
     }
 
@@ -60,13 +85,13 @@ class QuestionDisplay extends Component {
           <div className="modal">
             <div className="modal-content">
               <h1>Well done!</h1>
-              <img src='https://ubisafe.org/images/transparent-flames-fire-emoji-2.png' width="70" height="70"></img>
+              <img src='https://ubisafe.org/images/transparent-flames-fire-emoji-2.png' alt="fire emoji" width="70" height="70"></img>
             </div>
           </div>
 
           <p>{ selectedQuestion.question }</p>
 
-          <button className="solved-button" onClick={ toggleModal }>Solved it!</button>
+          <button className="solved-button" onClick={ this.questionSolved }>Solved it!</button>
         </div>
       );
     } else {
@@ -77,19 +102,6 @@ class QuestionDisplay extends Component {
   }
 }
 
-function toggleModal() {
-  let modal = document.querySelector(".modal");
-  modal.classList.toggle("show-modal");
-  setTimeout(function() { toggleModalHelper(); }, 1000);
-  // console.log(intervalID);
-  // await setTimeout(clearTimeout(intervalID), 1000);
-}
-
-function toggleModalHelper() {
-  let modal = document.querySelector(".modal");
-  modal.classList.toggle("show-modal");
-}
-
 function mapStateToProps(state) {
   return {
     currentTopic: state.currentTopic.topic,
@@ -97,4 +109,8 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(QuestionDisplay);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ topicSelected }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(QuestionDisplay);
