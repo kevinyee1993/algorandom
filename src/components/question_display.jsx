@@ -26,7 +26,8 @@ class QuestionDisplay extends Component {
   componentDidMount() {
     axios.get('/algorithms')
     .then(response => {
-        this.setState({ questionList: response.data })
+        let questionHash = arrayToHash(response.data);
+        this.setState({ questionList: questionHash })
       }
     )
     .catch(error => console.log("error!"))
@@ -64,9 +65,9 @@ class QuestionDisplay extends Component {
   filterQuestions(currentTopic) {
     const filteredQuestions = [];
 
-    this.state.questionList.forEach(question => {
-      if(question.category === currentTopic && !question.isSolved) {
-        filteredQuestions.push(question);
+    Object.keys(this.state.questionList).forEach(title => {
+      if(this.state.questionList[title].category === currentTopic && !this.state.questionList[title].isSolved) {
+        filteredQuestions.push(this.state.questionList[title]);
       }
     });
 
@@ -76,6 +77,8 @@ class QuestionDisplay extends Component {
   async questionSolved() {
     this.toggleModal();
     setTimeout(() => { this.props.topicSelected(this.props.currentTopic); }, MODAL_TIMER);
+
+    this.state.questionList[this.selectedQuestion.title].isSolved = true;
 
     await axios.put(`/algorithms/${ this.selectedQuestion.title }`, { isSolved: true })
       .then(success => console.log("nice"))
@@ -95,7 +98,6 @@ class QuestionDisplay extends Component {
   }
 
   pickRandomEmoji() {
-    console.log(this.questionSolvedPressed);
     if(this.questionSolvedPressed) {
       let selectedEmoji;
       const emojiList = [
@@ -150,6 +152,17 @@ class QuestionDisplay extends Component {
       );
     }
   }
+}
+
+function arrayToHash(arr) {
+  let hash = {};
+
+  for(let i = 0; i < arr.length; i++) {
+    let currEl = arr[i];
+    hash[currEl.title] = currEl;
+  }
+
+  return hash;
 }
 
 function mapStateToProps(state) {
