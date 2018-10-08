@@ -20,7 +20,7 @@ code {
 .question-display-body {
   border: 1px solid red;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
 }
 
 .topic-select-body {
