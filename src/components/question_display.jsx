@@ -14,6 +14,9 @@ class QuestionDisplay extends Component {
     this.currentQuestion = { "title": null };
     this.state = { questionList: [] };
 
+    // this.questionSolvedPressed = false;
+    // this.selectedEmoji = null;
+
     this.questionSolved = this.questionSolved.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
   }
@@ -60,6 +63,8 @@ class QuestionDisplay extends Component {
   }
 
   toggleModal() {
+    // this.questionSolvedPressed = true;
+    // this.pickRandomEmoji();
     let modal = document.querySelector(".modal");
     modal.classList.toggle("show-modal");
     setTimeout(function() {
@@ -68,14 +73,38 @@ class QuestionDisplay extends Component {
     }, MODAL_TIMER);
   }
 
+  pickRandomEmoji() {
+    console.log(this.questionSolvedPressed);
+    if(this.questionSolvedPressed) {
+      let selectedEmoji;
+      const emojiList = [
+        'https://ubisafe.org/images/transparent-flames-fire-emoji-2.png',
+        'https://ubisafe.org/images/transparent-emoji-thumbs-up-3.png',
+        'https://ubisafe.org/images/transparent-emoji-happy.png',
+        'https://ubisafe.org/images/smile-transparent-happy-3.png',
+        'https://ubisafe.org/images/appay-clipart-emojis-3.png',
+        'https://ubisafe.org/images/blushed-clipart-cool-emoji-4.png'
+      ];
+
+      selectedEmoji = emojiList[Math.floor(Math.random() * emojiList.length)];
+      this.questionSolvedPressed = false;
+      this.selectedEmoji = selectedEmoji;
+
+      return selectedEmoji;
+    } else {
+      return this.selectedEmoji;
+    }
+  }
+
 
   render() {
-
     let selectedQuestion = this.selectRandomQuestion(this.props.currentTopic);
     if(selectedQuestion) {
       // this.setState({ currentQuestion: selectedQuestion })
       this.currentQuestion = selectedQuestion;
     }
+
+    // console.log(this.selectedEmoji);
 
     if(selectedQuestion) {
       return(
@@ -85,7 +114,7 @@ class QuestionDisplay extends Component {
           <div className="modal">
             <div className="modal-content">
               <h1>Well done!</h1>
-              <img src='https://ubisafe.org/images/transparent-flames-fire-emoji-2.png' alt="fire emoji" width="70" height="70"></img>
+              <img src={ 'https://ubisafe.org/images/transparent-flames-fire-emoji-2.png' } alt="emoji" width="70" height="70"></img>
             </div>
           </div>
 
