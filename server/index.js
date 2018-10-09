@@ -44,14 +44,15 @@ const express        = require('express');
 const MongoClient    = require('mongodb').MongoClient;
 const bodyParser     = require('body-parser');
 const app            = express();
-const db             = require('../react-ui/config/db');
+// const db             = require('../react-ui/config/db');
 
 const port = process.env.PORT || 5000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-MongoClient.connect(db.url, (err, database) => {
+// MongoClient.connect(db.url, (err, database) => {
+MongoClient.connect('mongodb://algorandom:password123@ds125293.mlab.com:25293/algorandom', (err, database) => {
   if (err) return console.log(err)
   require('./app/routes')(app, database);
   app.listen(port, () => {
