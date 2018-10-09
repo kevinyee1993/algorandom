@@ -165,6 +165,8 @@ filterQuestions(currentTopic) {
         .then(success => console.log("nice"))
         .catch(error => console.log(error))
     }
+
+    this.props.topicSelected(this.props.currentTopic);
     // this.setState({ resetCounter: 1 });
     // this.selectedQuestion = this.selectRandomQuestion(this.props.currentTopic);
   }
