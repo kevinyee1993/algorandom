@@ -23,6 +23,7 @@ class QuestionDisplay extends Component {
     this.questionSolved = this.questionSolved.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.resetQuestions = this.resetQuestions.bind(this);
+    this.filterSolvedQuestions = this.filterSolvedQuestions.bind(this);
   }
 
   componentDidMount() {
@@ -134,17 +135,32 @@ filterQuestions(currentTopic) {
     }
   }
 
-  async resetQuestions() {
-    let questionTitles = Object.keys(this.state.questionList);
+  filterSolvedQuestions(currentTopic) {
+    const filteredQuestions = [];
+    let titles = Object.keys(this.state.questionList);
 
-    for(let i = 0; i < questionTitles.length; i++) {
-      await axios.put(`/algorithms/${ questionTitles[i] }`, { isSolved: false })
+    for(let i = 0; i < titles.length; i++) {
+      let title = titles[i];
+
+      if(this.state.questionList[title].category === currentTopic) {
+        filteredQuestions.push(this.state.questionList[title]);
+      }
+    }
+    return filteredQuestions;
+  }
+
+  async resetQuestions() {
+    let filteredQuestions = this.filterSolvedQuestions(this.props.currentTopic);
+    // let questionTitles = Object.keys(filteredQuestions);
+
+    // for(let i = 0; i < questionTitles.length; i++) {
+    for(let i = 0; i < filteredQuestions.length; i++) {
+      await axios.put(`/algorithms/${ filteredQuestions[i].title }`, { isSolved: false })
         .then(success => console.log("nice"))
         .catch(error => console.log(error))
     }
 
-    this.setState({ resetCounter: this.state.resetCounter++ });
-
+    // this.setState({ resetCounter: 1 });
     // this.selectedQuestion = this.selectRandomQuestion(this.props.currentTopic);
   }
 
@@ -174,7 +190,7 @@ filterQuestions(currentTopic) {
           <button className="solved-button" onClick={ this.questionSolved }>Solved it!</button>
         </div>
       );
-    } else {
+    } else if(this.props.currentTopic){
       return(
         <div className='question-display-body'>
           <h2>{ this.selectedQuestion.title }</h2>
@@ -182,6 +198,11 @@ filterQuestions(currentTopic) {
           <button className="reset-button" onClick={ this.resetQuestions }>Reset question list</button>
         </div>
       );
+    } else {
+      return(
+        <div>
+        </div>
+      )
     }
   }
 }
