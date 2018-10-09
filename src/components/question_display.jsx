@@ -67,7 +67,7 @@ filterQuestions(currentTopic) {
     for(let i = 0; i < titles.length; i++) {
       let title = titles[i];
 
-      if(this.state.questionList[title].category === currentTopic && !this.state.questionList[title].isSolved) {
+      if((currentTopic === 'anything' && !this.state.questionList[title].isSolved) || this.state.questionList[title].category === currentTopic && !this.state.questionList[title].isSolved) {
         filteredQuestions.push(this.state.questionList[title]);
       }
     }
@@ -129,7 +129,7 @@ filterQuestions(currentTopic) {
     for(let i = 0; i < titles.length; i++) {
       let title = titles[i];
 
-      if(this.state.questionList[title].category === currentTopic) {
+      if(currentTopic === 'anything' || this.state.questionList[title].category === currentTopic) {
         filteredQuestions.push(this.state.questionList[title]);
       }
     }

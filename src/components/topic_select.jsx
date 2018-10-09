@@ -15,6 +15,7 @@ class TopicSelect extends Component {
         <button onClick={ () => this.props.topicSelected('bit-manipulation') }>Bit Manipulation</button>
         <button onClick={ () => this.props.topicSelected('recursion-dynamic') }>Recursion and Dynamic Programming</button>
         <button onClick={ () => this.props.topicSelected('sorting-searching') }>Sorting and Searching</button>
+        <button onClick={ () => this.props.topicSelected('anything') }>Anything</button>
       </div>
     );
   }
