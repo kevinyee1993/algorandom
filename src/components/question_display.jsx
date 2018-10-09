@@ -17,9 +17,6 @@ class QuestionDisplay extends Component {
 
     this.selectedQuestion = null;
 
-    // this.questionSolvedPressed = false;
-    // this.selectedEmoji = null;
-
     this.questionSolved = this.questionSolved.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.resetQuestions = this.resetQuestions.bind(this);
@@ -38,11 +35,8 @@ class QuestionDisplay extends Component {
 
 
   selectRandomQuestion(currentTopic) {
-    // TODO: questionList length is 0, might be something wrong with filterQuestions
     let questionList = this.filterQuestions(currentTopic);
 
-
-    // TODO: handles the removal of questions
     if(questionList.length === 1) {
       this.selectedQuestion = questionList[0];
       return questionList[0];
@@ -66,7 +60,6 @@ class QuestionDisplay extends Component {
     return selectedQuestion;
   }
 
-// TODO: PROBLEM MIGHT BE HERE?!?!?!?
 filterQuestions(currentTopic) {
     const filteredQuestions = [];
     let titles = Object.keys(this.state.questionList);
@@ -78,20 +71,11 @@ filterQuestions(currentTopic) {
         filteredQuestions.push(this.state.questionList[title]);
       }
     }
-
-    // Object.keys(this.state.questionList).forEach(async title => {
-    //   if(this.state.questionList[title].category === currentTopic && !this.state.questionList[title].isSolved) {
-    //     await filteredQuestions.push(this.state.questionList[title]);
-    //   }
-    // });
-
-    // console.log(filteredQuestions);
-
     return filteredQuestions;
   }
 
   async questionSolved() {
-    this.toggleModal();
+    this.toggleModal(".modal");
     setTimeout(() => { this.props.topicSelected(this.props.currentTopic); }, MODAL_TIMER);
 
     this.state.questionList[this.selectedQuestion.title].isSolved = true;
@@ -102,15 +86,18 @@ filterQuestions(currentTopic) {
 
   }
 
-  toggleModal() {
+  toggleModal(className) {
     // this.questionSolvedPressed = true;
     // this.pickRandomEmoji();
-    let modal = document.querySelector(".modal");
+    let modal = document.querySelector(className);
     modal.classList.toggle("show-modal");
-    setTimeout(function() {
-      let modal = document.querySelector(".modal");
-      modal.classList.toggle("show-modal");
-    }, MODAL_TIMER);
+
+    if(className === '.modal') {
+      setTimeout(function() {
+        let modal = document.querySelector(className);
+        modal.classList.toggle("show-modal");
+      }, MODAL_TIMER);
+    }
   }
 
   pickRandomEmoji() {
@@ -151,24 +138,23 @@ filterQuestions(currentTopic) {
 
   async resetQuestions() {
     let filteredQuestions = this.filterSolvedQuestions(this.props.currentTopic);
-    // let questionTitles = Object.keys(filteredQuestions);
 
     let currentQuestions = this.filterSolvedQuestions(this.props.currentTopic);
+
+    this.toggleModal('.loading-modal');
 
     for(let i = 0; i < currentQuestions.length; i++) {
       this.state.questionList[currentQuestions[i].title].isSolved = false;
     }
 
-    // for(let i = 0; i < questionTitles.length; i++) {
     for(let i = 0; i < filteredQuestions.length; i++) {
       await axios.put(`/algorithms/${ filteredQuestions[i].title }`, { isSolved: false })
         .then(success => console.log("nice"))
         .catch(error => console.log(error))
     }
 
+
     this.props.topicSelected(this.props.currentTopic);
-    // this.setState({ resetCounter: 1 });
-    // this.selectedQuestion = this.selectRandomQuestion(this.props.currentTopic);
   }
 
 
@@ -202,6 +188,13 @@ filterQuestions(currentTopic) {
         <div className='question-display-body'>
           <h2>{ this.selectedQuestion.title }</h2>
           <p>{ this.selectedQuestion.question }</p>
+
+          <div className="loading-modal">
+            <div className="modal-content">
+              <h1>Loading questions...</h1>
+            </div>
+          </div>
+
           <button className="reset-button" onClick={ this.resetQuestions }>Reset question list</button>
         </div>
       );
