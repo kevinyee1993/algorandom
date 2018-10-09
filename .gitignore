@@ -4,6 +4,7 @@
 /node_modules
 config/db.js
 app/populate_db
+npm-debug.log
 
 # testing
 /coverage
@@ -12,6 +13,8 @@ app/populate_db
 /build
 
 # misc
+*.env
+*.dev
 .DS_Store
 .env.local
 .env.development.local
@@ -21,3 +24,7 @@ app/populate_db
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Docker
+Dockerfile
+docker-compose.yml
