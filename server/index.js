@@ -1,41 +1,60 @@
-const express = require('express');
-const path = require('path');
-const cluster = require('cluster');
-const numCPUs = require('os').cpus().length;
+// const express = require('express');
+// const path = require('path');
+// const cluster = require('cluster');
+// const numCPUs = require('os').cpus().length;
+//
+// const PORT = process.env.PORT || 5000;
+//
+// // Multi-process to utilize all CPU cores.
+// if (cluster.isMaster) {
+//   console.error(`Node cluster master ${process.pid} is running`);
+//
+//   // Fork workers.
+//   for (let i = 0; i < numCPUs; i++) {
+//     cluster.fork();
+//   }
+//
+//   cluster.on('exit', (worker, code, signal) => {
+//     console.error(`Node cluster worker ${worker.process.pid} exited: code ${code}, signal ${signal}`);
+//   });
+//
+// } else {
+//   const app = express();
+//
+//   // Priority serve any static files.
+//   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
+//
+//   // Answer API requests.
+//   app.get('/api', function (req, res) {
+//     res.set('Content-Type', 'application/json');
+//     res.send('{"message":"Hello from the custom server!"}');
+//   });
+//
+//   // All remaining requests return the React app, so it can handle routing.
+//   app.get('*', function(request, response) {
+//     response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
+//   });
+//
+//   app.listen(PORT, function () {
+//     console.error(`Node cluster worker ${process.pid}: listening on port ${PORT}`);
+//   });
+// }
 
-const PORT = process.env.PORT || 5000;
+const express        = require('express');
+const MongoClient    = require('mongodb').MongoClient;
+const bodyParser     = require('body-parser');
+const app            = express();
+const db             = require('./react-ui/config/db');
 
-// Multi-process to utilize all CPU cores.
-if (cluster.isMaster) {
-  console.error(`Node cluster master ${process.pid} is running`);
+const port = process.env.PORT || 5000;
 
-  // Fork workers.
-  for (let i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-  cluster.on('exit', (worker, code, signal) => {
-    console.error(`Node cluster worker ${worker.process.pid} exited: code ${code}, signal ${signal}`);
+MongoClient.connect(db.url, (err, database) => {
+  if (err) return console.log(err)
+  require('./app/routes')(app, database);
+  app.listen(port, () => {
+    console.log('We are live on ' + port);
   });
-
-} else {
-  const app = express();
-
-  // Priority serve any static files.
-  app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
-
-  // Answer API requests.
-  app.get('/api', function (req, res) {
-    res.set('Content-Type', 'application/json');
-    res.send('{"message":"Hello from the custom server!"}');
-  });
-
-  // All remaining requests return the React app, so it can handle routing.
-  app.get('*', function(request, response) {
-    response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
-  });
-
-  app.listen(PORT, function () {
-    console.error(`Node cluster worker ${process.pid}: listening on port ${PORT}`);
-  });
-}
+})
