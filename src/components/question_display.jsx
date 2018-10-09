@@ -153,13 +153,18 @@ filterQuestions(currentTopic) {
     let filteredQuestions = this.filterSolvedQuestions(this.props.currentTopic);
     // let questionTitles = Object.keys(filteredQuestions);
 
+    let currentQuestions = this.filterSolvedQuestions(this.props.currentTopic);
+
+    for(let i = 0; i < currentQuestions.length; i++) {
+      this.state.questionList[currentQuestions[i].title].isSolved = false;
+    }
+
     // for(let i = 0; i < questionTitles.length; i++) {
     for(let i = 0; i < filteredQuestions.length; i++) {
       await axios.put(`/algorithms/${ filteredQuestions[i].title }`, { isSolved: false })
         .then(success => console.log("nice"))
         .catch(error => console.log(error))
     }
-
     // this.setState({ resetCounter: 1 });
     // this.selectedQuestion = this.selectRandomQuestion(this.props.currentTopic);
   }
