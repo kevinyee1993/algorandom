@@ -190,8 +190,9 @@ filterQuestions(currentTopic) {
           <p>{ this.selectedQuestion.question }</p>
 
           <div className="loading-modal">
-            <div className="modal-content">
+            <div className="loading-modal-content">
               <h1>Loading questions...</h1>
+              <div className='loader'></div>
             </div>
           </div>
 
