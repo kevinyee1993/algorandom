@@ -21,6 +21,10 @@ module.exports = function(app, db) {
     res.send(arr);
   });
 
+  app.get('*', function(req, res) {
+    console.log("do nothing");
+  });
+
   app.put('/algorithms/:title', (req,res) => {
   const details = { 'title': req.params.title };
 
@@ -33,4 +37,9 @@ module.exports = function(app, db) {
     }
   });
 });
+
+app.put('*', function(req, res) {
+  console.log("do nothing");
+});
+
 };
