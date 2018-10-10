@@ -1,9 +1,5 @@
 module.exports = function(app, db) {
 
-  if (process.env.NODE_ENV === 'production') {
-	app.use(express.static('client/build'));
-  }
-
   // const algorithms =
   app.post('/algorithms', (req, res) => {
     const algorithm = { category: req.body.category,

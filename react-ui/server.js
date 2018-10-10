@@ -28,6 +28,10 @@ const port = process.env.PORT || 5000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+if (process.env.NODE_ENV === 'production') {
+app.use(express.static('client/build'));
+}
+
 MongoClient.connect(db.url, { useNewUrlParser: true }, (err, database) => {
   if (err) return console.log(err)
   require('./app/routes')(app, database);
