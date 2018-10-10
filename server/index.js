@@ -46,10 +46,11 @@ if (cluster.isMaster) {
   });
 
   // MongoClient.connect(db.url, { useNewUrlParser: true }, (err, database) => {
-  MongoClient.connect('mongodb://heroku_04m0llt0:ljc2m3k9qungt8h9vvqu14qcp7@ds227373.mlab.com:27373/heroku_04m0llt0', { useNewUrlParser: true }, (err, database) => {
+  MongoClient.connect(db, { useNewUrlParser: true }, (err, database) => {
     // MongoClient.connect('mongodb://algorandom:password123@ds125293.mlab.com:25293/algorandom', (err, database) => {
     console.log("I am connected");
     console.log(db);
+    console.log(PORT);
     console.log("end of sentence");
 
     if (err) return console.log(err)
