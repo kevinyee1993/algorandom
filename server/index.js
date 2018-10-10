@@ -45,8 +45,7 @@ if (cluster.isMaster) {
     console.error(`Node cluster worker ${process.pid}: listening on port ${PORT}`);
   });
 
-  console.log("just checking!");
-  console.log(PORT);
+  console.log(db);
 
   // MongoClient.connect(db.url, { useNewUrlParser: true }, (err, database) => {
   MongoClient.connect(db, { useNewUrlParser: true }, (err, database) => {
