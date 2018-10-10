@@ -12,19 +12,19 @@ const db             = process.env.mongoURL || require('../config/db');
 const PORT = process.env.PORT || 5000;
 
 // Multi-process to utilize all CPU cores.
-if (cluster.isMaster) {
-  console.error(`Node cluster master ${process.pid} is running`);
-
-  // Fork workers.
-  for (let i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
-
-  cluster.on('exit', (worker, code, signal) => {
-    console.error(`Node cluster worker ${worker.process.pid} exited: code ${code}, signal ${signal}`);
-  });
-
-} else {
+// if (cluster.isMaster) {
+//   console.error(`Node cluster master ${process.pid} is running`);
+//
+//   // Fork workers.
+//   for (let i = 0; i < numCPUs; i++) {
+//     cluster.fork();
+//   }
+//
+//   cluster.on('exit', (worker, code, signal) => {
+//     console.error(`Node cluster worker ${worker.process.pid} exited: code ${code}, signal ${signal}`);
+//   });
+//
+// } else {
   // const app = express();
 
   // Priority serve any static files.
@@ -59,7 +59,7 @@ if (cluster.isMaster) {
       console.log('We are live on ' + PORT);
     });
   });
-}
+// }
 
 // const express        = require('express');
 // const MongoClient    = require('mongodb').MongoClient;
