@@ -33,10 +33,10 @@ const PORT = process.env.PORT || 5000;
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
   // Answer API requests.
-  app.get('/api', function (req, res) {
-    res.set('Content-Type', 'application/json');
-    res.send('{"message":"Hello from the custom serverzz!"}');
-  });
+  // app.get('/api', function (req, res) {
+  //   res.set('Content-Type', 'application/json');
+  //   res.send('{"message":"Hello from the custom serverzz!"}');
+  // });
 
   // app.get('/algorithms', async (req, res) => {
   //   res.set('Content-Type', 'application/json');
@@ -63,6 +63,11 @@ const PORT = process.env.PORT || 5000;
     console.log("end of sentence");
 
     if (err) return console.log(err)
+
+    app.get('/api', function (req, res) {
+      res.set('Content-Type', 'application/json');
+      res.send('{"message":"Hello from the custom server!"}');
+    });
 
     require('./app/routes')(app, database);
 
