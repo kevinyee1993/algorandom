@@ -3,6 +3,12 @@ const path = require('path');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 
+const MongoClient    = require('mongodb').MongoClient;
+const bodyParser     = require('body-parser');
+const app            = express();
+// const db             = require('../react-ui/config/db');
+const db             = process.env.mongoURL || require('../config/db');
+
 const PORT = process.env.PORT || 5000;
 
 // Multi-process to utilize all CPU cores.
@@ -19,7 +25,7 @@ if (cluster.isMaster) {
   });
 
 } else {
-  const app = express();
+  // const app = express();
 
   // Priority serve any static files.
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
@@ -37,6 +43,15 @@ if (cluster.isMaster) {
 
   app.listen(PORT, function () {
     console.error(`Node cluster worker ${process.pid}: listening on port ${PORT}`);
+  });
+
+  MongoClient.connect(db.url, { useNewUrlParser: true }, (err, database) => {
+    // MongoClient.connect('mongodb://algorandom:password123@ds125293.mlab.com:25293/algorandom', (err, database) => {
+    if (err) return console.log(err)
+    require('../react-ui/app/routes')(app, database);
+    app.listen(PORT, () => {
+      console.log('We are live on ' + PORT);
+    });
   });
 }
 
