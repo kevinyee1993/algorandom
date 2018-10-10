@@ -75,13 +75,14 @@ const PORT = process.env.PORT || 5000;
     });
 
     app.get('/algorithms', async (req, res) => {
-
+      res.set('Content-Type', 'application/json');
       let arr = await database.collection('algorithms').find().toArray();
       res.send(arr);
     });
 
     app.put('/algorithms/:title', (req,res) => {
-    const details = { 'title': req.params.title };
+      res.set('Content-Type', 'application/json');
+      const details = { 'title': req.params.title };
 
     const isSolved = { isSolved: req.body.isSolved };
     database.collection('algorithms').update(details, {$set : isSolved}, (err, result) => {
