@@ -66,10 +66,27 @@ const PORT = process.env.PORT || 5000;
 
     app.get('/api', function (req, res) {
       res.set('Content-Type', 'application/json');
-      res.send('{"message":"Hello from the custom server!"}');
+      res.send('{"message":"Hello from the custom servers!"}');
     });
 
-    require('./app/routes')(app, database);
+    app.get('/algorithms', async (req, res) => {
+
+      let arr = await database.collection('algorithms').find().toArray();
+      res.send(arr);
+    });
+
+    app.put('/algorithms/:title', (req,res) => {
+    const details = { 'title': req.params.title };
+
+    const isSolved = { isSolved: req.body.isSolved };
+    database.collection('algorithms').update(details, {$set : isSolved}, (err, result) => {
+      if (err) {
+          res.send({'error':'An error has occurred'});
+      } else {
+          res.send(isSolved);
+      }
+    });
+  });
 
     app.get('*', function(request, response) {
       response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
