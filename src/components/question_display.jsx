@@ -24,7 +24,7 @@ class QuestionDisplay extends Component {
   }
 
   componentDidMount() {
-    axios.get('/algorithms')
+    axios.get('/api/algorithms')
     .then(response => {
         let questionHash = arrayToHash(response.data);
         this.setState({ questionList: questionHash })
