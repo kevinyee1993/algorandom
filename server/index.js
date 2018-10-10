@@ -56,11 +56,6 @@ const PORT = process.env.PORT || 5000;
 
   // MongoClient.connect(db.url, { useNewUrlParser: true }, (err, database) => {
   MongoClient.connect(db, { useNewUrlParser: true }, (err, client) => {
-    // MongoClient.connect('mongodb://algorandom:password123@ds125293.mlab.com:25293/algorandom', (err, database) => {
-    console.log("I am connected");
-    console.log(db);
-    console.log(PORT);
-    console.log("end of sentence");
 
     if (err) return console.log(err)
 
