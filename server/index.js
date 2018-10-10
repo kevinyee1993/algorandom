@@ -71,7 +71,7 @@ app.use(bodyParser.json());
 MongoClient.connect(db, { useNewUrlParser: true }, (err, database) => {
 // MongoClient.connect('mongodb://algorandom:password123@ds125293.mlab.com:25293/algorandom', (err, database) => {
   if (err) return console.log(err)
-  require('../app/routes')(app, database);
+  require('./app/routes')(app, database);
   app.listen(port, () => {
     console.log('We are live on ' + port);
   });
