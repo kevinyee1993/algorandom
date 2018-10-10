@@ -45,12 +45,13 @@ if (cluster.isMaster) {
     console.error(`Node cluster worker ${process.pid}: listening on port ${PORT}`);
   });
 
-  console.log(db);
-
   // MongoClient.connect(db.url, { useNewUrlParser: true }, (err, database) => {
   MongoClient.connect(db, { useNewUrlParser: true }, (err, database) => {
     // MongoClient.connect('mongodb://algorandom:password123@ds125293.mlab.com:25293/algorandom', (err, database) => {
     console.log("I am connected");
+    console.log(db);
+    console.log("end of sentence");
+
     if (err) return console.log(err)
     require('./app/routes')(app, database);
     app.listen(PORT, () => {
