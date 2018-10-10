@@ -72,6 +72,43 @@ MongoClient.connect(db, { useNewUrlParser: true }, (err, database) => {
 // MongoClient.connect('mongodb://algorandom:password123@ds125293.mlab.com:25293/algorandom', (err, database) => {
   if (err) return console.log(err)
   // require('./server/app/routes')(app, database);
+
+  function routes(app, db) {
+    // const algorithms =
+    app.post('/algorithms', (req, res) => {
+      const algorithm = { category: req.body.category,
+        title: req.body.title,
+        question: req.body.question,
+        isSolved: req.body.isSolved
+      };
+      db.collection('algorithms').insert(algorithm, (err, result) => {
+        if (err) {
+          res.send({ 'error': 'An error has occurred' });
+        } else {
+          res.send(result.ops[0]);
+        }
+      });
+    });
+
+    app.get('/algorithms', async (req, res) => {
+      let arr = await db.collection('algorithms').find().toArray();
+      res.send(arr);
+    });
+
+    app.put('/algorithms/:title', (req,res) => {
+    const details = { 'title': req.params.title };
+
+    const isSolved = { isSolved: req.body.isSolved };
+    db.collection('algorithms').update(details, {$set : isSolved}, (err, result) => {
+      if (err) {
+          res.send({'error':'An error has occurred'});
+      } else {
+          res.send(isSolved);
+      }
+    });
+  });
+  };
+
   app.listen(port, () => {
     console.log('We are live on ' + port);
   });
