@@ -60,7 +60,6 @@ const PORT = process.env.PORT || 5000;
     console.log("I am connected");
     console.log(db);
     console.log(PORT);
-    console.log(database);
     console.log("end of sentence");
 
     if (err) return console.log(err)
