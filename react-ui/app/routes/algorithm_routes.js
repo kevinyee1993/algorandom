@@ -1,5 +1,9 @@
 module.exports = function(app, db) {
 
+  if (process.env.NODE_ENV === 'production') {
+	   app.use(express.static('client/build'));
+  }
+
   // const algorithms =
   app.post('/algorithms', (req, res) => {
     const algorithm = { category: req.body.category,
@@ -17,13 +21,13 @@ module.exports = function(app, db) {
   });
 
   // app.get('/algorithms', async (req, res) => {
-  app.get('https://algorandom.herokuapp.com/algorithms', async (req, res) => {
+  app.get('/algorithms', async (req, res) => {
     let arr = await db.collection('algorithms').find().toArray();
     res.send(arr);
   });
 
-  app.get('*', function(req, res) {
-    console.log("do nothing");
+  app.get('*', (request, response) => {
+  	response.sendFile(path.join(__dirname, 'client/build', 'index.html'));
   });
 
   app.put('/algorithms/:title', (req,res) => {
