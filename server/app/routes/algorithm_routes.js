@@ -17,9 +17,12 @@ module.exports = function(app, db) {
   });
 
   app.get('/algorithms', async (req, res) => {
-    console.log(db);
     let arr = await db.collection('algorithms').find().toArray();
     res.send(arr);
+  });
+
+  app.get('*', function(req, res) {
+    console.log("do nothing");
   });
 
   app.put('/algorithms/:title', (req,res) => {
@@ -34,4 +37,9 @@ module.exports = function(app, db) {
     }
   });
 });
+
+app.put('*', function(req, res) {
+  console.log("do nothing");
+});
+
 };
