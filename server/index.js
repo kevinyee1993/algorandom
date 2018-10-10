@@ -9,6 +9,7 @@ const app            = express();
 // const db             = require('../react-ui/config/db');
 const db             = process.env.mongoURL || require('../config/db');
 
+// maybe find a way to change this process.env.PORT
 const PORT = process.env.PORT || 5000;
 
 // Multi-process to utilize all CPU cores.
@@ -41,9 +42,9 @@ const PORT = process.env.PORT || 5000;
     response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
   });
 
-  app.listen(PORT, function () {
-    console.error(`Node cluster worker ${process.pid}: listening on port ${PORT}`);
-  });
+  // app.listen(PORT, function () {
+  //   console.error(`Node cluster worker ${process.pid}: listening on port ${PORT}`);
+  // });
 
   // MongoClient.connect(db.url, { useNewUrlParser: true }, (err, database) => {
   MongoClient.connect(db, { useNewUrlParser: true }, (err, database) => {
