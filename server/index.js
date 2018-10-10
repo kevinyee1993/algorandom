@@ -12,7 +12,7 @@ const db             = process.env.mongoURL || require('../config/db');
 const PORT = process.env.PORT || 5000;
 
 // Multi-process to utilize all CPU cores.
-if (false || cluster.isMaster) {
+if (cluster.isMaster) {
   console.error(`Node cluster master ${process.pid} is running`);
 
   // Fork workers.
@@ -45,8 +45,13 @@ if (false || cluster.isMaster) {
     console.error(`Node cluster worker ${process.pid}: listening on port ${PORT}`);
   });
 
-  MongoClient.connect(db.url, { useNewUrlParser: true }, (err, database) => {
+  console.log("just checking!");
+  console.log(PORT);
+
+  // MongoClient.connect(db.url, { useNewUrlParser: true }, (err, database) => {
+  MongoClient.connect(db, { useNewUrlParser: true }, (err, database) => {
     // MongoClient.connect('mongodb://algorandom:password123@ds125293.mlab.com:25293/algorandom', (err, database) => {
+    console.log("I am connected");
     if (err) return console.log(err)
     require('./app/routes')(app, database);
     app.listen(PORT, () => {
