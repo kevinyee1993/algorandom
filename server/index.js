@@ -60,9 +60,14 @@ const PORT = process.env.PORT || 5000;
     console.log("I am connected");
     console.log(db);
     console.log(PORT);
+    console.log(database);
     console.log("end of sentence");
 
     if (err) return console.log(err)
+
+    app.listen(PORT, () => {
+      console.log('We are live on ' + PORT);
+    });
 
     app.get('/api', function (req, res) {
       res.set('Content-Type', 'application/json');
@@ -91,9 +96,8 @@ const PORT = process.env.PORT || 5000;
     app.get('*', function(request, response) {
       response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
     });
-    app.listen(PORT, () => {
-      console.log('We are live on ' + PORT);
-    });
+
+
   });
 // }
 
