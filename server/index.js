@@ -67,7 +67,8 @@ const port = process.env.PORT || 5000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-MongoClient.connect(db.url, { useNewUrlParser: true }, (err, database) => {
+// MongoClient.connect(db.url, { useNewUrlParser: true }, (err, database) => {
+MongoClient.connect(db, { useNewUrlParser: true }, (err, database) => {
 // MongoClient.connect('mongodb://algorandom:password123@ds125293.mlab.com:25293/algorandom', (err, database) => {
   if (err) return console.log(err)
   require('./app/routes')(app, database);
