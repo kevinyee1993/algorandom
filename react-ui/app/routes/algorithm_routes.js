@@ -17,7 +17,7 @@ module.exports = function(app, db) {
   });
 
   // app.get('/algorithms', async (req, res) => {
-  app.get('/api/algorithms', async (req, res) => {
+  app.get('/algorithms', async (req, res) => {
     let arr = await db.collection('algorithms').find().toArray();
     res.send(arr);
   });
@@ -26,7 +26,7 @@ module.exports = function(app, db) {
   	response.sendFile(path.join(__dirname, 'client/build', 'index.html'));
   });
 
-  app.put('/api/algorithms/:title', (req,res) => {
+  app.put('/algorithms/:title', (req,res) => {
   const details = { 'title': req.params.title };
 
   const isSolved = { isSolved: req.body.isSolved };
