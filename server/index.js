@@ -32,9 +32,6 @@ const PORT = process.env.PORT || 5000;
 
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
-  if (process.env.NODE_ENV === 'production') {
-    app.use(express.static('client/build'));
-  }
   // Answer API requests.
   app.get('/api', function (req, res) {
     res.set('Content-Type', 'application/json');
